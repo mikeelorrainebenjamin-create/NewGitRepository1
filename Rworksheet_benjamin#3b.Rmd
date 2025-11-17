@@ -1,0 +1,176 @@
+---
+title: "Rworksheet_benjamin#3b"
+author: "Mikee Lorraine S. Benjamin"
+date: "2025-10-20"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+#1. Create a data frame using the table below.
+
+#a. Write the codes.
+# Create the data frame
+df <- data.frame(
+  Respondents = 1:20,
+  Sex = c(2,2,1,2,2,2,2,1,2,2,1,2,2,2,2,2,2,2,1,2),
+  Fathers_Occupation = c(1,3,3,3,1,2,3,1,1,1,3,2,1,3,3,1,3,1,2,1),
+  Persons_at_Home = c(5,7,3,8,5,9,6,7,8,4,7,5,4,7,8,8,3,11,7,6),
+  Siblings_at_School = c(6,4,4,1,2,1,5,3,1,2,3,2,5,5,2,2,2,5,3,2),
+  Types_of_Houses = c(1,2,3,1,1,3,3,1,2,3,2,3,2,2,3,3,3,3,3,2)
+)
+
+#b. Describe the data. Get the structure or the summary of the data
+# Structure of the data
+str(df)
+
+# Summary of the data
+summary(df)
+
+#c. Is the mean number of siblings attending is 5?
+#No, the mean number of siblings attending school is 3.1, not 5.
+
+#d. Extract the 1st two rows and then all the columns using the subsetting functions. Write the codes and its output.
+df[1:2, ]
+
+#output
+#  Respondents   Sex Fathers_Occupation Persons_at_Home Siblings_at_School Types_of_Houses
+#1           1 Female            Farmer               5                  6            Wood
+#2           2 Female            Others               7                  4 Semi-Concrete
+
+#e. Extract 3rd and 5th row with 2nd and 4th column. Write the codes and its result.
+df[c(3,5), c(2,4)]
+
+#output
+#    Sex Persons_at_Home
+#3   Male               3
+#5 Female               5
+
+#f. Select the variable types of houses then store the vector that results as types_houses. Write the codes.
+types__houses <- df$Types_of_Houses
+
+#g. Select only all Males respondent that their father occupation was farmer. Write the codes and its output.
+subset(df, Sex == "Male" & Fathers_Occupation == "Farmer")
+
+#output
+#  Respondents  Sex Fathers_Occupation Persons_at_Home Siblings_at_School Types_of_Houses
+#3           3 Male            Farmer               3                  4         Concrete
+#19         19 Male            Farmer               7                  3         Concrete
+
+#h. Select only all females respondent that have greater than or equal to 5 number of siblings attending school. Write the codes and its outputs.
+subset(df, Sex == "Female" & Siblings_at_School >= 5)
+
+#output
+#  Respondents   Sex Fathers_Occupation Persons_at_Home Siblings_at_School Types_of_Houses
+#1           1 Female            Farmer               5                  6            Wood
+#6           6 Female            Driver               9                  5        Concrete
+#7           7 Female            Others               6                  5        Concrete
+#14         14 Female            Others               7                  5     Semi-Concrete
+#18         18 Female            Farmer              11                  5        Concrete
+
+#2. Write a R program to create an empty data frame. Using the following codes:
+df <- data.frame(Ints = integer(),
+                 Doubles = double(),
+                 Characters = character(),
+                 Logicals = logical(),
+                 Factors = factor(),
+                 stringsAsFactors = FALSE)
+
+print("Structure of the empty dataframe:")
+print(str(df))
+
+#a. Describe the results.
+#This code creates an empty data frame with five columns (Ints, Doubles, Characters, Logicals, and Factors).
+#Each column is initialized as an empty vector of a specific data type.
+
+#3. Create a .csv file of this. Save it as HouseholdData.csv
+
+a. Import the csv file into the R environment. Write the codes.
+```{r}
+write.csv(household, "HouseholdData.csv", row.names = FALSE)
+
+data <- read.csv("HouseholdData.csv")
+
+print(data)
+```
+
+b. Convert the Sex into factor using factor() function and change it into integer.[Legend: Male = 1 and Female = 2]. Write the R codes and its output.
+```{r}
+data$Sex <- factor(data$Sex, levels = c("Male", "Female"), labels = c(1, 2))
+data$Sex <- as.integer(data$Sex)
+data
+```
+
+c. Convert the Type of Houses into factor and change it into integer. [Legend: Wood
+= 1; Congrete = 2; Semi-Congrete = 3]. Write the R codes and its output.
+```{r} 
+data$Type_of_House <- trimws(data$Type_of_House)
+
+data$Type_of_House <- factor(data$Type_of_House,
+                             levels = c("Wood", "Concrete", "Semi-Concrete"),
+                             labels = c(1, 2, 3))
+
+data$Type_of_House <- as.integer(data$Type_of_House)
+
+data$Type_of_House
+
+
+```
+
+d. On father’s occupation, factor it as Farmer = 1; Driver = 2; and Others = 3. What
+is the R code and its output?
+```{r}
+data$Fathers_Occupation <- factor(data$Fathers_Occupation, levels = c("Farmer", "Driver", "Others"), labels = c(1, 2, 3))
+data$Fathers_Occupation <- as.integer(data$Fathers_Occupation)
+
+data
+```
+
+e. Select only all females respondent that has a father whose occupation is driver. Write
+the codes and its output.
+```{r}
+female_driver <- subset(data, Sex == 2 & Fathers_Occupation == 2)
+
+print(female_driver)
+```
+
+f. Select the respondents that have greater than or equal to 5 number of siblings attending
+school. Write the codes and its output.
+```{r}
+siblings5 <- subset(data, Siblings_at_school >= 5)
+
+print(siblings5)
+```
+
+#4. Interpret the graph.
+
+
+Therefore, the chart essentially indicates that the majority of respondents stay in wooden houses with concrete and semi-concrete following. The occupants of wood houses appear to have a higher number of siblings in school which may indicate that bigger families are prevalent in such a house.
+
+On the other hand, the people living in concrete houses tend to have fewer siblings and may have smaller families and thus have higher economic status.
+
+In general, the trend indicated in the graph suggests the potential correlation between family size and type of housing- larger families are more likely to be housed in simple houses.
+
+
